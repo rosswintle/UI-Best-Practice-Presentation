@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>User Interface Best Practice</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="jquery.lightbox-0.5.css" media="screen" />
+<script type="text/javascript" src="jquery-1.4.2.min.js"> </script>
+<script type="text/javascript" src="jquery.localscroll-1.2.7-min.js"> </script>
+<script type="text/javascript" src="jquery.lightbox-0.5.min.js"></script>
+<script type="text/javascript">
+	var sectionLen = 550;
+	
+	function activateButtons (i) {
+		if (i == $('.sections-container').data('max-pos'))
+		{
+			$('.next').addClass('disabled');
+		} 
+		else
+		{
+			$('.next').removeClass('disabled');
+		};
+		if (i == 0)
+		{
+			$('.prev').addClass('disabled');
+		}
+		else
+		{
+			$('.prev').removeClass('disabled');
+		};		
+	};
+	
+	$(document).ready( function () {
+		// Add scrollTo handler to sections container
+		$('.sections-container').bind( 'scrollTo', function (e, i) {
+			if (i >= 0 && i <= $(this).data('max-pos'))
+			{
+				var newMargin = ( i * -sectionLen ) + "px" ;
+				$(this).stop(true, true).animate( { 'margin-top' : newMargin } );
+				$('.nav .current').removeClass('current');
+				$('.nav li').eq(i).addClass('current');	
+				$(this).data('slide-pos', i);
+				activateButtons(i);
+			}
+		} );
+		// Set the sections container height
+		$('.sections-container').css('height', ($('.section').length * sectionLen) + "px" );
+		// Set the first nav link to current
+		//$('ul.nav a').eq(0).addClass('current');
+		// Set the sections container data for slide-pos to 1 and max-pos to the maximum slide number
+		$('.sections-container').data('slide-pos', 0).data('max-pos', $('ul.nav a').length - 1);
+		// Enable prev/next arrows
+		$('.arrow').removeClass('hidden');
+		// Do a scroll to set everything up
+		$('.sections-container').triggerHandler('scrollTo', 0);
+		// Add click handlers to menu items
+		$('ul.nav a').each( function (i) {
+			$(this).click( function () {
+				$('.sections-container').triggerHandler('scrollTo', i);
+				return false;
+			} )
+		} );
+		// Add click handlers to next/prev buttons
+		$('.next').click( function () { $('.sections-container').triggerHandler( 'scrollTo' , $('.sections-container').data('slide-pos') + 1) } );
+		$('.prev').click( function () { $('.sections-container').triggerHandler( 'scrollTo' , $('.sections-container').data('slide-pos') - 1) } );
+		
+		// Set up lightboxes
+//		$('a img').lightBox();
+		
+	});
+</script>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="sidebar1">
+    <h1>User Interface Best Practice</h1>
+	<h2>Contents</h2>
+    <ul class="nav">
+      <li><a href="#about">What it's All About</a></li>
+      <li><a href="#structure">Structure</a></li>
+      <li><a href="#signposting">Signposting</a></li>
+      <li><a href="#validation">Validation</a></li>
+      <li><a href="#hiding">Element Hiding</a></li>
+      <li><a href="#ajax">AJAX</a></li>
+      <li><a href="#enhancement">Enhancement</a></li>
+      <li><a href="#accessibility">Accessibility</a></li>
+      <li><a href="#summing">Summing Up</a></li>
+    </ul>
+    <!-- end .sidebar1 --></div>
+  <div class="content">
+    <!-- These are hidden by default and enabled by progressive enhancement -->
+	<div class="arrow prev hidden"></div>
+	<div class="arrow next hidden"></div>
+  	<div class="sections-container">
+		<div class="section">
+			<a name="about"></a>
+			<h2>What it's All About</h2>
+			<img class="fltrt" src="images/internetbuttons.png" />
+			<ul>
+				<li>The Organisation</li>
+				<li>Making things easy
+					<ul>
+						<li>Achieving a goal</li>
+						<li>Getting information</li>
+						<li>Taking action</li>
+					</ul>
+				</li>
+				<li>"Nudging"</li>
+			</ul>
+			<h2>The User!!</h2>
+		</div>
+		<div class="section">
+			<a name="structure"></a>
+			<h2>Structure</h2>
+			<p><img src="images/structure.png" width="690px"/></p>
+			<ul>
+				<li>Site structure</li>
+				<li>Page structure</li>
+				<li>Semantics</li>
+				<li>Separation of content and style</li>
+			</ul>
+		</div>
+		<div class="section">
+			<a name="signposting"></a>
+			<h2>Signposting</h2>
+			<img class="fltrt" src="images/progress.png" />
+			<ul>
+				<li>Where am I</li>
+				<li>Where have I been</li>
+				<li>Where am I going</li>
+				<li>How long will this take</li>
+			</ul>				
+			<p><img src="images/signpost.png" width="690px" style="clear: both; margin-top: 30px;"/></p>
+		</div>
+		<div class="section">
+			<a name="validation"></a>
+			<h2>Validation</h2>
+			<p><img src="images/ie9-install-error.jpg" width="400px"/></p>
+			<ul>
+				<li>Form instruction
+					<ul>
+						<li>How to get it right first time</li>
+					</ul>
+				</li>
+				<li>What's gone wrong</li>
+				<li>How do I fix it?</li>
+			</ul>
+			<quote>&quot;Your password is the wrong length or has invalid characters&quot;</quote>
+			<ul>
+				<li>Client vs Server</li>
+				<li>On submit vs Real Time</li>
+				<li>JavaScript &amp; AJAX</li>
+				<li>Feedback on success</li>
+			</ul>
+		</div>
+		<div class="section">
+			<a name="hiding"></a>
+			<h2>Element hiding</h2>
+			<a href="images/complexity.png"><img src="images/complexity.png" class="fltrt" height="450px" /></a>
+			<ul>
+				<li>Complexity vs usability</li>
+				<li>Hiding features</li>
+				<li><strong>Removing</strong> features</li>
+			</ul>
+		</div>
+		<div class="section">
+			<a name="ajax"></a>
+			<h2>AJAX and Scripting</h2>
+			<a href="images/lifehacker-ajax.png"><img class="fltrt" src="images/lifehacker-ajax.png" width="250px" /></a>
+			<ul>
+				<li>Hugely powerful</li>
+				<li>Positive and negative effects on UI</li>
+				<li>Validation and Autocomplete</li>
+				<li>Complete UI</li>
+			</ul>
+		</div>
+		<div class="section">
+			<a name="enhancement"></a>
+			<h2>Progressive Enhancement</h2>
+			<h3>Why?</h3>
+			<img class="fltrt" src="images/ie6countdown.png" width="300px" />
+			<ul>
+				<li>For older browsers</li>
+				<li>For mobile</li>
+				<li>For those with scripts disabled</li>
+			</ul>
+			<h3>How?</h3>
+			<ul>
+				<li>Libraries and frameworks</li>
+				<li>Enabling extra functionality</li>
+				<li>Good structure and design</li>
+			</ul>
+			<h3>Who to cater for?</h3>
+			<ul>
+				<li>80:20 rule</li>
+				<li>Analytics - know your audience</li>
+			<ul>
+		</div>
+		<div class="section">
+			<a name="accessibility"></a>
+			<h2>Accessibility</h2>
+			<ul>
+				<li>Structure</li>
+				<li>Semantics</li>
+				<li>Additional information</li>
+				<li>Colour</li>
+				<li>Visual-only elements</li>
+				<li>Input/output devices</li>
+				<li>User's experience
+					<ul>
+						<li>Language</li>
+					</ul>
+				</li>
+				<li>Guidelines and tools</li>
+			</ul>
+		</div>
+		<div class="section">
+			<a name="summing"></a>
+			<h2>Summing Up</h2>
+			<ul>
+				<li>Who's it for?
+					<ul>
+						<li>The organisation</li>
+						<li>The user</li>
+					</ul>
+				</li>
+				<li>What does it achieve?
+					<ul>
+						<li>The users' goals</li>
+						<li>Complexity vs Usability</li>
+				</li>
+				<li>How do we do it?
+				<ul>
+					<li>Planning and structure</li>
+					<li>Technology</li>
+					<li>Testing</li>
+				</li>
+			</ul>
+		</div>
+	  <!-- end .sections-container --></div>
+	<!-- end .content --></div>
+  <!-- end .container --></div>
+</body>
+</html>
